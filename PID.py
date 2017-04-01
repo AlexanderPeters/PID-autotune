@@ -4,7 +4,7 @@ import numpy as np
 import time
 import argparse
 import socket
-import sys
+import sys,re
 from pdb import set_trace as br
 
 # Routines to parse command line arguments
@@ -41,6 +41,13 @@ def udpInit(udp_ip,udp_port):
 	UDP_SOCK.setblocking(0) # make the recieve not wait for the buffer to fill before continuing
 	udpSend(str('0'),UDP_SOCK) # send simple packet so roboRIO gets the ip address to send to
 	return UDP_SOCK
+def udpSend(message,sock):
+	# try:
+	sock.sendto(message, (UDP_IP, UDP_PORT))
+	# except socket.error:
+		# print('Warning: Could not connect to '+UDP_IP+', port:'+str(UDP_PORT))
+	if args.debug:
+		print('Sent:'+message)
 def udpRecieve(sock):
 	try:
 		data, addr=sock.recvfrom(1024) #buffer size
@@ -53,8 +60,8 @@ def udpRecieve(sock):
 	return data, addr
 if __name__ == "__main__":
 	sock=udpInit('10.31.40.42',5803)
+	udpSend('Hello world',sock)
 	f=open('new.txt','a')
 	while True:
 		recieved=udpRecieve(sock)
 		f.write(recieved)
-	
