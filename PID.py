@@ -22,8 +22,6 @@ def udpInit(udp_ip,udp_port):
 	#set ip address
 	try:
 		assert type(udp_ip)==str
-		if not re.match('\\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\\b',udp_ip):
-			raise 'n cookie'
 		UDP_IP = udp_ip
 	except:
 		eprint('Error: Provided udp_ip is not a valid ip')
@@ -38,8 +36,8 @@ def udpInit(udp_ip,udp_port):
 	#define socket
 	UDP_SOCK = socket.socket(socket.AF_INET, # Internet
 							 socket.SOCK_DGRAM) # UDP
+	UDP_SOCK.connect((UDP_IP,UDP_PORT))
 	UDP_SOCK.setblocking(0) # make the receive not wait for the buffer to fill before continuing
-	udpSend(str('0'),UDP_SOCK) # send simple packet so roboRIO gets the ip address to send to
 	return UDP_SOCK
 def udpSend(message,sock):
 	# try:
@@ -59,11 +57,15 @@ def udpReceive(sock):
 		print(data)
 	return data, addr
 if __name__ == "__main__":
-	sock=udpInit('10.31.40.42',5803)
+#	sock=udpInit('10.31.40.53',5802)
+#	sock=udpInit('roboRIO-3140-FRC.frc-robot.local',5802)	
+	sock=udpInit('Lycoris.frc-robot.local',5802)
+
 	udpSend('Hello world',sock)
 	f=open('new.txt','a')
 	while True:
 		received=None
 		received,addr=udpReceive(sock)
-		if received is not None:
+		if received is not None and received != '':
+			print("received "+received)
 			f.write(received)
