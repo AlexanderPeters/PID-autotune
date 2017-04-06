@@ -58,8 +58,8 @@ def udpReceive(sock):
 	return data, addr
 if __name__ == "__main__":
 #	sock=udpInit('10.31.40.53',5802)
-#	sock=udpInit('roboRIO-3140-FRC.frc-robot.local',5802)	
-	sock=udpInit('Lycoris.frc-robot.local',5802)
+	sock=udpInit('roboRIO-3140-FRC.frc-robot.local',5802)	
+#	sock=udpInit('Lycoris.frc-robot.local',5802)
 
 	udpSend('Hello world',sock)
 	f=open('new.txt','a')
